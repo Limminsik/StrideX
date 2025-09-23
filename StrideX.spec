@@ -5,7 +5,7 @@ a = Analysis(
     ['stridex.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('assets/stridex.ico', 'assets'), ('assets/stridex.png', 'assets')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
