@@ -14,7 +14,7 @@ Gait Physiological Signal Dashboard - StrideX (v10 Final)
   · 프로그램 아이콘 설정
 """
 
-import json, os, gzip, re, sys
+import json, os, gzip, re, sys, tempfile
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from tkinter import font as tkfont
@@ -23,6 +23,13 @@ from typing import Any, Dict, List, Tuple, Union, Optional
 import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+
+# PIL import (아이콘 변환용)
+try:
+    from PIL import Image
+    PIL_AVAILABLE = True
+except ImportError:
+    PIL_AVAILABLE = False
 
 Json = Union[Dict[str, Any], List[Any], str, int, float, bool, None]
 
@@ -359,14 +366,8 @@ class App(tk.Tk):
         self.title(APP_TITLE)
         self.geometry(f"{WIN_W}x{WIN_H}")
 
-        # 프로그램 아이콘 설정
-        try:
-            self.iconbitmap(resource_path("assets/stridex.ico"))
-        except Exception:
-            try:
-                self.iconphoto(True, tk.PhotoImage(file=resource_path("assets/stridex.png")))
-            except Exception:
-                pass  # 아이콘 파일이 없어도 프로그램은 정상 동작
+        # 프로그램 아이콘 설정 (참조 유지)
+        self._set_icon()
 
         self.paths: List[str] = []
         self.cur_dir = os.getcwd()
@@ -410,6 +411,39 @@ class App(tk.Tk):
             anchor='e', justify='right',
             font=footer_font
         ).pack(side=tk.RIGHT, padx=8, pady=2)
+
+    def _set_icon(self):
+        """프로그램 아이콘 설정: 우선 ICO, 없으면 PNG->ICO 변환 후 사용 (참조 유지)"""
+        try:
+            ico_path = resource_path("assets/stridex.ico")
+            png_path = resource_path("assets/stridex.png")
+
+            # 1) EXE/탐색기/작업표시줄 아이콘: ico가 있으면 최우선
+            if os.path.exists(ico_path):
+                self.iconbitmap(ico_path)
+
+            # 2) 타이틀바/작업표시줄 안정화를 위해 PhotoImage도 함께 세팅(참조 유지!)
+            if os.path.exists(png_path):
+                self._icon_img = tk.PhotoImage(file=png_path)
+                try:
+                    self.iconphoto(True, self._icon_img)
+                except Exception:
+                    pass
+
+            # 3) ico가 아예 없고 png만 있을 때 → 임시폴더에 변환 후 iconbitmap 적용(선택)
+            if not os.path.exists(ico_path) and os.path.exists(png_path) and PIL_AVAILABLE:
+                tmp_ico = os.path.join(tempfile.gettempdir(), "stridex_runtime.ico")
+                try:
+                    Image.open(png_path).convert("RGBA").save(
+                        tmp_ico,
+                        sizes=[(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)]
+                    )
+                    self.iconbitmap(tmp_ico)
+                except Exception as e:
+                    print("PNG→ICO 변환 실패:", e)
+
+        except Exception as e:
+            print("아이콘 설정 실패:", e)
 
     def add_files(self):
         fs = filedialog.askopenfilenames(
