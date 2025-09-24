@@ -203,24 +203,23 @@ document.addEventListener("DOMContentLoaded", () => {
       subjects.forEach(subject => {
         const item = document.createElement('div');
         item.className = 'subject-item';
-        item.setAttribute('data-subject-id', subject.id);
         item.innerHTML = `
           <div class="subject-id">${subject.id}</div>
           <div class="subject-sensors">${subject.sensors.join(', ')}</div>
         `;
-        item.addEventListener('click', (event) => selectSubject(subject.id, event.currentTarget));
+        item.addEventListener('click', () => selectSubject(subject.id));
         subjectList.appendChild(item);
       });
       
       if (subjects.length > 0) {
-        selectSubject(subjects[0].id, null);
+        selectSubject(subjects[0].id);
       }
     } catch (err) {
       showError(`Subjects 로딩 실패: ${err.message}`);
     }
   }
 
-  async function selectSubject(subjectId, eventTarget) {
+  async function selectSubject(subjectId) {
     try {
       clearError();
       
@@ -228,15 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll('.subject-item').forEach(item => {
         item.classList.remove('active');
       });
-      if (eventTarget) {
-        eventTarget.classList.add('active');
-      } else {
-        // eventTarget이 없으면 해당 subject ID를 가진 요소를 찾아서 활성화
-        const targetItem = document.querySelector(`[data-subject-id="${subjectId}"]`);
-        if (targetItem) {
-          targetItem.classList.add('active');
-        }
-      }
+      event.target.closest('.subject-item').classList.add('active');
       
       console.log(`Subject 선택: ${subjectId}`);
       

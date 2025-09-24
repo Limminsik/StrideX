@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gait Physiological Signal Dashboard - StrideX</title>
+    <base href="./"> <!-- ✅ file://에서 상대경로 강제 -->
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+<body>
+  <div class="container">
+    <!-- 상단 바 -->
+    <header class="topbar">
+        <h1 class="brand">Gait Physiological Signal Dashboard &mdash; StrideX</h1>
+    </header>
+
+    <!-- 본문 (3열: 좌측 목록 / 중앙 본문 / 우측 사이드바) -->
+    <div class="layout">
+      <!-- 좌측: Subject 목록 -->
+      <aside class="subjects">
+        <div class="sidecard">
+          <div class="side-title">Subjects</div>
+          
+          <!-- 버튼 영역을 여기로 이동 -->
+          <div class="side-actions">
+            <input type="file" id="fileInput" multiple accept=".json,.jsonl,.ndjson" style="display: none;">
+            <button id="btnAdd" class="btn btn-primary wfull">데이터 추가</button>
+            <button id="btnReset" class="btn btn-ghost wfull">데이터 초기화</button>
+          </div>
+
+          <!-- 기존 Subject 리스트 -->
+          <ul id="subjectList" class="subj-list"></ul>
+        </div>
+      </aside>
+
+      <!-- 중앙: 스크롤 가능한 대시보드 -->
+      <main class="dashboard">
+                <!-- IMU 섹션 -->
+                <div class="card">
+                  <div class="card-title">IMU</div>
+                  <div class="glist">
+                    <!-- 보행 주기 -->
+                    <div class="gauge" data-section="imu" data-key="gait_cycle" data-scale="0.6,1.6">
+                      <div class="gcell left">
+                        <div class="metric">보행 주기 (s) / gait_cycle</div>
+                        <div class="vals">
+                          <span class="tag l">L</span><span class="val-L num">–</span>
+                          <span class="tag r">R</span><span class="val-R num">–</span>
+                        </div>
+                      </div>
+                      <div class="gcell right">
+                        <div class="bar">
+                          <div class="tick-L"></div>
+                          <div class="tick-R"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 무릎 굴곡 최대각 -->
+                    <div class="gauge" data-section="imu" data-key="knee_flexion_max" data-scale="40,80">
+                      <div class="gcell left">
+                        <div class="metric">무릎 굴곡 최대각 (deg) / knee_flexion_max</div>
+                        <div class="vals">
+                          <span class="tag l">L</span><span class="val-L num">–</span>
+                          <span class="tag r">R</span><span class="val-R num">–</span>
+                        </div>
+                      </div>
+                      <div class="gcell right">
+                        <div class="bar">
+                          <div class="tick-L"></div>
+                          <div class="tick-R"></div>
+                        </div>
+                      </div>
+                    </div>
+
+            <!-- 무릎 신전 최대각 -->
+            <div class="gauge" data-section="imu" data-key="knee_extension_max" data-scale="0,30">
+              <div class="gcell left">
+                <div class="metric">무릎 신전 최대각 (deg) / knee_extension_max</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 발 들림 높이 -->
+            <div class="gauge" data-section="imu" data-key="foot_clearance" data-scale="0,20">
+              <div class="gcell left">
+                <div class="metric">발 클리어런스 (mm) / foot_clearance</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gait Pad 섹션 -->
+        <div class="card">
+          <div class="card-title">Gait Pad</div>
+          <div class="glist">
+            <!-- 보폭 -->
+            <div class="gauge" data-section="pad" data-key="step_length" data-scale="40,120">
+              <div class="gcell left">
+                <div class="metric">보폭 (cm) / step_length</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 보행 속도 -->
+            <div class="gauge" data-section="pad" data-key="velocity" data-scale="80,160">
+              <div class="gcell left">
+                <div class="metric">보행 속도 (cm/s) / velocity</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 입각기 비율 -->
+            <div class="gauge" data-section="pad" data-key="stance_phase_rate" data-scale="0,100">
+              <div class="gcell left">
+                <div class="metric">입각기 비율 (%) / stance_phase_rate</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 유각기 비율 -->
+            <div class="gauge" data-section="pad" data-key="swing_phase_rate" data-scale="0,100">
+              <div class="gcell left">
+                <div class="metric">유각기 비율 (%) / swing_phase_rate</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 양측 지지시간 -->
+            <div class="gauge" data-section="pad" data-key="double_support_time" data-scale="0,40">
+              <div class="gcell left">
+                <div class="metric">이중지지시간 (%) / double_support_time</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 보행주기(Stride time) – 위치 겹침 방지용으로 별도 카드 아래 배치 -->
+          <div class="phase card-sub">
+            <div class="phase-title">보행주기 (Stride time)</div>
+            <div class="prow">
+              <span class="pside l">L (좌)</span>
+              <div class="pbar"><div id="pad_phase_L"></div></div>
+            </div>
+            <div class="prow">
+              <span class="pside r">R (우)</span>
+              <div class="pbar"><div id="pad_phase_R"></div></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Smart Insole 섹션 -->
+        <div class="card">
+          <div class="card-title">Smart Insole</div>
+          <!-- Day 칩 -->
+          <div class="day-chips" id="dayChips"></div>
+          <div class="glist">
+            <!-- 보행 속도 -->
+            <div class="gauge" data-section="insole-day" data-key="gait_speed" data-scale="0,10">
+              <div class="gcell left">
+                <div class="metric">보행 속도 (m/s) / gait_speed</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 좌우 균형 -->
+            <div class="gauge" data-section="insole-day" data-key="balance" data-scale="0,100">
+              <div class="gcell left">
+                <div class="metric">좌우 균형 (%) / balance</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 후방 압력 -->
+            <div class="gauge" data-section="insole-day" data-key="foot_pressure_rear" data-scale="0,100">
+              <div class="gcell left">
+                <div class="metric">후방 압력 (%) / foot_pressure_rear</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 중앙 압력 -->
+            <div class="gauge" data-section="insole-day" data-key="foot_pressure_mid" data-scale="0,100">
+              <div class="gcell left">
+                <div class="metric">중앙 압력 (%) / foot_pressure_mid</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 전방 압력 -->
+            <div class="gauge" data-section="insole-day" data-key="foot_pressure_fore" data-scale="0,100">
+              <div class="gcell left">
+                <div class="metric">전방 압력 (%) / foot_pressure_fore</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 보행 거리 -->
+            <div class="gauge" data-section="insole-day" data-key="gait_distance" data-scale="0,1000">
+              <div class="gcell left">
+                <div class="metric">보행 거리 (m) / gait_distance</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 보폭 -->
+            <div class="gauge" data-section="insole-day" data-key="stride_length" data-scale="30,120">
+              <div class="gcell left">
+                <div class="metric">보폭 (cm) / stride_length</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 발각도 -->
+            <div class="gauge" data-section="insole-day" data-key="foot_angle" data-scale="-2,2">
+              <div class="gcell left">
+                <div class="metric">발각도 (deg) / foot_angle</div>
+                <div class="vals">
+                  <span class="tag l">L</span><span class="val-L num">–</span>
+                  <span class="tag r">R</span><span class="val-R num">–</span>
+                </div>
+              </div>
+              <div class="gcell right">
+                <div class="bar">
+                  <div class="tick-L"></div>
+                  <div class="tick-R"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- 우측 사이드바(메타/라벨)로 이동 -->
+      <aside class="rightbar">
+        <div class="sidecard">
+          <div class="side-title">Meta</div>
+          <table class="kv"><tbody id="meta_tbody"></tbody></table>
+        </div>
+        <div class="sidecard">
+          <div class="side-title">Labels</div>
+          <table class="kv"><tbody id="labels_tbody"></tbody></table>
+        </div>
+      </aside>
+    </div>
+
+    <!-- 하단 푸터 -->
+    <footer class="footer">
+      <p>GCU License Copyright (c) 2025 Limminsik</p>
+    </footer>
+
+    <!-- 에러 메시지 -->
+    <div id="errorBox" class="error-box" style="display:none;"></div>
+  </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

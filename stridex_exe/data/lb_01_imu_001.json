@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "patient": {
+      "id": "SUBJ_001",
+      "gender": "1",
+      "age": "60",
+      "height": "169.5",
+      "weight": "63.7",
+      "bmi": "22.2",
+      "foot_size": "255",
+      "leg_length_L": "900",
+      "leg_length_R": "905",
+      "condition": "정상",
+      "symptom": null
+    }
+  },
+  "data": {
+    "imu_sensor": {
+      "source_path": "원천데이터/IMU센서/정상/01_imu_001.json",
+      "values": {
+        "gait_cycle": {
+          "L": "1.05",
+          "R": "1.04"
+        },
+        "knee_flexion_max": {
+          "L": "60",
+          "R": "61"
+        },
+        "knee_extension_max": {
+          "L": "12",
+          "R": "13"
+        },
+        "foot_clearance": {
+          "L": "15",
+          "R": "15"
+        }
+      }
+    }
+  },
+  "labels": {
+    "annotation": {
+      "class": "0",
+      "side": null,
+      "region": null
+    },
+    "diagnosis_text": null
+  }
+}
