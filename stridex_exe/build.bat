@@ -1,26 +1,42 @@
 @echo off
-echo Building StrideX Desktop Application...
+echo ========================================
+echo StrideX Desktop Dashboard Build Script
+echo ========================================
+echo.
 
-REM 가상환경 활성화 (있는 경우)
-if exist ".venv\Scripts\activate.bat" (
-    call .venv\Scripts\activate.bat
+echo [1/4] Cleaning previous builds...
+if exist "build" rmdir /s /q "build"
+if exist "dist" rmdir /s /q "dist"
+if exist "*.spec" del "*.spec"
+echo ✓ Cleaned
+
+echo.
+echo [2/4] Installing dependencies...
+pip install -r requirements.txt
+echo ✓ Dependencies installed
+
+echo.
+echo [3/4] Building executable...
+pyinstaller main.py --name "StrideX_Desktop" --onefile --noconsole --icon assets\stridex.ico --add-data "web;web" --add-data "assets\stridex.ico;assets" --clean
+echo ✓ Build completed
+
+echo.
+echo [4/4] Finalizing...
+if exist "dist\StrideX_Desktop.exe" (
+    echo ✓ Executable created: dist\StrideX_Desktop.exe
+    echo ✓ Size: 
+    dir "dist\StrideX_Desktop.exe" | findstr "StrideX_Desktop.exe"
+) else (
+    echo ✗ Build failed!
+    exit /b 1
 )
 
-REM 의존성 설치
-pip install -r requirements.txt
-pip install pyinstaller
-
-REM PyInstaller로 빌드
-pyinstaller desktop\main.py ^
-  --name "StrideX Dashboard" ^
-  --onefile --noconsole ^
-  --icon assets\stridex.ico ^
-  --add-data "backend\static;backend\static" ^
-  --add-data "backend\data;backend\data" ^
-  --add-data "assets\stridex.ico;assets" ^
-  --hidden-import uvicorn ^
-  --hidden-import fastapi ^
-  --hidden-import pywebview
-
-echo Build completed! Check dist\ folder for StrideX Dashboard.exe
+echo.
+echo ========================================
+echo Build completed successfully!
+echo ========================================
+echo.
+echo To run: dist\StrideX_Desktop.exe
+echo To test: python main.py
+echo.
 pause
