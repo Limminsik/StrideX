@@ -2,12 +2,12 @@
 
 ## 개요
 
-StrideX는 **초거대 AI 확산 생태계 조성 사업(https://www.msit.go.kr/bbs/view.do?mId=311&bbsSeqNo=100&nttSeqNo=3179387)’의 ‘2025년 초거대 AI 학습용 데이터 품질검증** 활용을 목적으로로 개발된 품질 전문 도구입니다.
+StrideX는 **[초거대 AI 확산 생태계 조성 사업"](https://www.msit.go.kr/bbs/view.do?mId=311&bbsSeqNo=100&nttSeqNo=3179387)’의 ‘2025년 초거대 AI 학습용 데이터 품질검증** 활용을 목적으로로 개발된 품질 전문 도구입니다.
 
 보행 관련 센서데이터 기반의 근골격계 질환 생체신호 데이터 **의미정확성** 검증을 목적으로 설계되었으며 무릎관절염 등 근골격계 질환 환자의 보행 신호 라벨링 품질을 검증하는 데 특화되어 있습니다.
 
 
-![StrideX](./StrideX Dashboard(v1.0).png) 
+![StrideX Dashboard](./StrideX%20Dashboard(v1.0).png)
 
 
 ## 주요 기능
