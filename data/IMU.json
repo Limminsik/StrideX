@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "patient": {
+      "id": "SUBJ_002",
+      "gender": "1",
+      "age": "67",
+      "height": "170.2",
+      "weight": "68.4",
+      "bmi": "23.5",
+      "foot_size": "260",
+      "leg_length_L": "910",
+      "leg_length_R": "920",
+      "condition": "고혈압",
+      "symptom": "보행 시 통증"
+    }
+  },
+  "data": {
+    "imu_sensor": {
+      "source_path": "원천데이터/IMU센서/무릎관절염/02_imu_002.json",
+      "values": {
+        "gait_cycle": {
+          "L": "1.1",
+          "R": "1.1"
+        },
+        "knee_flexion_max": {
+          "L": "66",
+          "R": "66"
+        },
+        "knee_extension_max": {
+          "L": "7",
+          "R": "10"
+        },
+        "foot_clearance": {
+          "L": "13",
+          "R": "12"
+        }
+      }
+    }
+  },
+  "labels": {
+    "annotation": {
+      "class": "1",
+      "side": "L",
+      "region": "무릎"
+    },
+    "diagnosis_text": "좌측 무릎관절염 심각 / 보행에 큰 어려움"
+  }
+}
